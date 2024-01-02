@@ -23,16 +23,10 @@ func Log(name ...string) *glog.Logger {
 
 func ContextValue(ctx context.Context, key string, val any) context.Context {
 	value := ctx.Value(LogCtxKey)
-	if value == nil {
-		value = &gmap.Map{}
-		ctx = context.WithValue(ctx, LogCtxKey, value)
-	}
-	gm, ok := value.(*gmap.Map)
+	gm, ok := value.(gmap.Map)
 	if !ok {
-		gm = &gmap.Map{}
-		value = gm
-		ctx = context.WithValue(ctx, LogCtxKey, value)
+		gm = gmap.Map{}
 	}
 	gm.Set(key, val)
-	return ctx
+	return context.WithValue(ctx, LogCtxKey, gm)
 }
