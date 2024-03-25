@@ -13,10 +13,6 @@ var clients = &sync.Map{}
 
 func Start(cfgs []Config) error {
 	for i, cfg := range cfgs {
-		db, err := gorm.Open(cfg.GetDialector())
-		if err != nil {
-			return err
-		}
 
 		group := cfg.Group
 
@@ -28,6 +24,10 @@ func Start(cfgs []Config) error {
 			continue
 		}
 
+		db, err := gorm.Open(cfg.GetDialector(), cfg.BuildGormConfig())
+		if err != nil {
+			return err
+		}
 		// db setting
 		sqlDB, err := db.DB()
 
