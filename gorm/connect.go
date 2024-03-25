@@ -18,8 +18,17 @@ func Start(cfgs []Config) error {
 			return err
 		}
 
-		// db setting
+		group := cfg.Group
 
+		if len(group) == 0 {
+			group = GroupDefault
+		}
+		_, ok := clients.Load(group)
+		if ok {
+			continue
+		}
+
+		// db setting
 		sqlDB, err := db.DB()
 
 		if cfg.MaxIdleCount > 0 {
@@ -41,8 +50,8 @@ func Start(cfgs []Config) error {
 			db:  db,
 			cfg: cfg,
 		}
-		if i == 0 || cfg.Group == GroupDefault {
-			clients.Store(GroupDefault, c)
+		if i == 0 || group == GroupDefault {
+			clients.Store(group, c)
 		}
 		clients.Store(cfg.Group, c)
 	}
