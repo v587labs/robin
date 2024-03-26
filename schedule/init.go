@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/v587labs/robin/rcobra"
 	"github.com/v587labs/robin/rlog"
 	"golang.org/x/sync/errgroup"
 	"strings"
@@ -107,7 +106,8 @@ func Commands() []*cobra.Command {
 }
 
 func AddExecCommand(parent *cobra.Command) {
-	sub := &cobra.Command{
+	cobra.EnableTraverseRunHooks = true
+	exec := &cobra.Command{
 		Use:   "exec",
 		Short: "execute schedule task",
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
@@ -115,6 +115,6 @@ func AddExecCommand(parent *cobra.Command) {
 			return nil
 		},
 	}
-	rcobra.AddCommands(sub, Commands()...)
-	rcobra.AddCommands(parent, sub)
+	exec.AddCommand(Commands()...)
+	parent.AddCommand(exec)
 }
