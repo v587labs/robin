@@ -47,7 +47,7 @@ func Start(cfgs []Config) error {
 		}
 
 		c := &Client{
-			db:  db,
+			DB:  db,
 			cfg: cfg,
 		}
 		if i == 0 || group == GroupDefault {
@@ -77,5 +77,5 @@ func DB(ctx context.Context, group ...string) (*gorm.DB, error) {
 	if !ok {
 		return nil, errors.New(fmt.Sprintf("group connect error %s", g))
 	}
-	return cc.db, nil
+	return cc.DB, nil
 }

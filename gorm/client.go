@@ -10,6 +10,6 @@ const (
 )
 
 type Client struct {
-	db  *gorm.DB
+	*gorm.DB
 	cfg Config
 }
