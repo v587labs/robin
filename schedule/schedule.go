@@ -3,9 +3,12 @@ package schedule
 import (
 	"codnect.io/chrono"
 	"context"
+	"crypto/rand"
 	"github.com/spf13/cobra"
 	"github.com/v587labs/robin/rlog"
+	"math/big"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -23,8 +26,16 @@ type scheduler struct {
 	lck       sync.Mutex
 }
 
+var id = uint64(0)
+
+func init() {
+	b, _ := rand.Int(rand.Reader, big.NewInt(1000000000))
+	id = 100000000 + b.Uint64()
+}
+
 func (s *scheduler) run(ctx context.Context) {
-	ctx, logger := rlog.With(ctx, "task", s.name, "id", "")
+	id := atomic.AddUint64(&id, 1)
+	ctx, logger := rlog.With(ctx, "task", s.name, "id", id)
 	logger.Debug("start")
 	s.task(ctx)
 	logger.Debug("complete")

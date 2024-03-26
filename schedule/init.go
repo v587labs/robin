@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/v587labs/robin/rlog"
 	"golang.org/x/sync/errgroup"
 	"strings"
 	"sync"
@@ -97,7 +96,6 @@ func Commands() []*cobra.Command {
 			Short: fmt.Sprintf("run task :%s ", s.name),
 			RunE:  s.runECmd,
 			PersistentPreRun: func(cmd *cobra.Command, args []string) {
-				rlog.L(cmd.Context()).Info("task")
 			},
 		}
 		cmds = append(cmds, cmd)
@@ -111,7 +109,6 @@ func AddExecCommand(parent *cobra.Command) {
 		Use:   "exec",
 		Short: "execute schedule task",
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-			rlog.L(cmd.Context()).Info("exec")
 			return nil
 		},
 	}
