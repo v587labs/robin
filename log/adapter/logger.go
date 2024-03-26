@@ -1,4 +1,4 @@
-package log
+package adapter
 
 // A Logger writes key/value pairs to a Handler
 type Logger interface {

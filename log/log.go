@@ -2,15 +2,16 @@ package log
 
 import (
 	"context"
+	"github.com/v587labs/robin/log/adapter"
 	"github.com/v587labs/robin/log/adapter/log15"
 )
 
 type logContextKey struct {
 }
 
-var root Logger = log15.New()
+var root adapter.Logger = log15.New()
 
-func New(ctx ...interface{}) Logger {
+func New(ctx ...interface{}) adapter.Logger {
 	return root.New(ctx...)
 }
 
@@ -31,23 +32,23 @@ func Crit(msg string, ctx ...interface{}) {
 	root.Crit(msg, ctx...)
 }
 
-func L(ctx context.Context) Logger {
+func L(ctx context.Context) adapter.Logger {
 	value := ctx.Value(logContextKey{})
 	if value == nil {
 		return root
 	}
-	l, ok := value.(Logger)
+	l, ok := value.(adapter.Logger)
 	if !ok {
 		return root
 	}
 	return l
 }
 
-func WithContext(ctx context.Context, logger Logger) context.Context {
+func WithContext(ctx context.Context, logger adapter.Logger) context.Context {
 	return context.WithValue(ctx, logContextKey{}, logger)
 }
 
-func With(ctx context.Context, keyvals ...interface{}) (context.Context, Logger) {
+func With(ctx context.Context, keyvals ...interface{}) (context.Context, adapter.Logger) {
 	logger := L(ctx).New(keyvals...)
 	ctx = WithContext(ctx, logger)
 	return ctx, logger

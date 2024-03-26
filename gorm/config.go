@@ -3,6 +3,7 @@ package gorm
 import (
 	"fmt"
 	"gorm.io/gorm"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -18,6 +19,7 @@ type Config struct {
 	Port            int    `mapstructure:"port" toml:"port" json:"port,omitempty" yaml:"port"`
 	User            string `mapstructure:"user" toml:"user" json:"user,omitempty" yaml:"user"`
 	Pass            string `mapstructure:"pass" toml:"pass" json:"pass,omitempty" yaml:"pass"`
+	Home            string `mapstructure:"home" toml:"home" json:"home,omitempty" yaml:"home"`
 	Name            string `mapstructure:"name" toml:"name" json:"name,omitempty" yaml:"name"`
 	ApplicationName string `mapstructure:"applicationName" toml:"applicationName" json:"application_name,omitempty" yaml:"applicationName"`
 	MaxIdleCount    int    `mapstructure:"maxIdleCount" toml:"maxIdleCount" json:"maxIdleCount,omitempty" yaml:"maxIdleCount"`
@@ -102,49 +104,8 @@ func (cfg Config) buildPostgresqlDsn() (string, error) {
 }
 
 func (cfg Config) buildSqliteDsn() (string, error) {
-	//	postgresql://[user[:password]@][netloc][:port][/dbname][?params]
-	// user=gorm password=gorm dbname=gorm port=9920 sslmode=disable TimeZone=Asia/Shanghai
-	// dsn := "host=localhost user=gorm password=gorm dbname=gorm port=9920 sslmode=disable TimeZone=Asia/Shanghai"
-	dsn := strings.Builder{}
-	if len(cfg.User) > 0 {
-		dsn.WriteByte(' ')
-		dsn.WriteString("user=")
-		dsn.WriteString(cfg.User)
-	}
-	if len(cfg.Pass) > 0 {
-		dsn.WriteByte(' ')
-		dsn.WriteString("password=")
-		dsn.WriteString(cfg.Pass)
-	}
-
-	if len(cfg.Host) > 0 {
-		dsn.WriteByte(' ')
-		dsn.WriteString("host=")
-		dsn.WriteString(cfg.Host)
-	}
-	if cfg.Port > 0 {
-		dsn.WriteByte(' ')
-		dsn.WriteString("port=")
-		dsn.WriteString(strconv.Itoa(cfg.Port))
-	}
-	if len(cfg.Name) > 0 {
-		dsn.WriteByte(' ')
-		dsn.WriteString("dbname=")
-		dsn.WriteString(cfg.Name)
-	}
-	params := strings.Builder{}
-	if len(cfg.ApplicationName) > 0 {
-		params.WriteString("application_name=")
-		params.WriteString(cfg.ApplicationName)
-		params.WriteByte('&')
-	}
-	if len(cfg.SslMode) > 0 {
-		dsn.WriteByte(' ')
-		dsn.WriteString("sslmode=")
-		dsn.WriteString(cfg.SslMode)
-	}
-
-	return strings.TrimSpace(dsn.String()), nil
+	path := filepath.Join(cfg.Home, cfg.Host)
+	return strings.TrimSpace(path), nil
 }
 
 func (cfg Config) GetDialector() gorm.Dialector {

@@ -12,6 +12,9 @@ import (
 var clients = &sync.Map{}
 
 func Start(cfgs []Config) error {
+	if len(cfgs) < 1 {
+		return errors.New("db config error")
+	}
 	for i, cfg := range cfgs {
 
 		group := cfg.Group
