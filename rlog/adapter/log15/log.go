@@ -2,7 +2,7 @@ package log15
 
 import (
 	"github.com/inconshreveable/log15"
-	"github.com/v587labs/robin/log/adapter"
+	"github.com/v587labs/robin/rlog/adapter"
 )
 
 type Log15 struct {

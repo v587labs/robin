@@ -1,4 +1,4 @@
-package os
+package ros
 
 import (
 	"bytes"
@@ -97,7 +97,7 @@ func TestTrickedTruncation(t *testing.T) {
 	}
 
 	// 2. Now cause the truncation of the original file.
-	// It is absolutely legal to invoke os.Open on a directory.
+	// It is absolutely legal to invoke ros.Open on a directory.
 	if err := CopyFile(tmpDir, originalWALPath); err == nil {
 		t.Fatal("Expected an error")
 	}

@@ -1,9 +1,9 @@
-package log
+package rlog
 
 import (
 	"context"
-	"github.com/v587labs/robin/log/adapter"
-	"github.com/v587labs/robin/log/adapter/log15"
+	"github.com/v587labs/robin/rlog/adapter"
+	"github.com/v587labs/robin/rlog/adapter/log15"
 )
 
 type logContextKey struct {
