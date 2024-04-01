@@ -24,6 +24,7 @@ type scheduler struct {
 
 	scheduled bool
 	lck       sync.Mutex
+	ctx       context.Context
 }
 
 var id = uint64(0)

@@ -75,6 +75,7 @@ func _startAll(ctx context.Context) {
 			defer schedulerLck.Unlock()
 
 			for _, s := range schedulers {
+				s.ctx = ctx
 				err := s.startSchedule()
 				if err != nil {
 					panic(err)
